@@ -23,9 +23,13 @@ class DataObjectComment extends DataObject {
 	
 	public function valid() {
 		if($this->owner->TargetID && $this->owner->TargetType) {
-			if(DataObject::get_by_id($this->owner->TargetType, $this->owner->TargetID))
+			if($this->Target())
 				return true;
 		}
 		return false;
+	}
+	
+	public function Target() {
+		return DataObject::get_by_id($this->TargetType, $this->TargetID);
 	}
 }

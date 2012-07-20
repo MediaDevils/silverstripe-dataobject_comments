@@ -42,6 +42,10 @@ class DataObjectComments extends Controller {
 		$comment->extend('handleComment', $form);
 		$comment->write();
 		
+		$target = $comment->Target();
+		if($target && $target->hasMethod('DataObjectCommentAdd'))
+			$target->DataObjectCommentAdd($comment);
+		
 		$this->redirectBack();
 	}
 }
