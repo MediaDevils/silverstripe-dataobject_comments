@@ -39,12 +39,46 @@ class DataObjectComments extends Controller {
 	public function ActionAddComment($data, $form) {
 		$comment = new DataObjectComment();
 		$form->saveInto($comment);
-		$comment->extend('handleComment', $form);
+		$comment->extend('handleAdd', $form);
 		$comment->write();
 		
 		$target = $comment->Target();
 		if($target && $target->hasMethod('DataObjectCommentAdd'))
 			$target->DataObjectCommentAdd($comment);
+			
+		if($this->isAjax() && SSViewer::hasTemplate("DataObjectCommentLayout")) {
+			return $comment->renderWith("DataObjectCommentLayout");
+		} else return $this->redirectBack();
+	}
+	
+	public function FormRemoveComment($request = null, DataObjectComment $comment = null) {
+		$fields = new HiddenFieldSet(
+			new HiddenField("CommentID", "Comment ID")
+		);
+		
+		if($comment) {
+			$commentIDField = $fields->fieldByName("CommentID");
+			if($commentIDField)
+				$commentIDField->setValue($comment->ID);
+		}
+		
+		$actions = new FieldSet(
+			new FormAction("ActionRemoveComment", "Remove Comment")
+		);
+		
+		return new Form($this, "FormRemoveComment", $fields, $actions);
+	}
+	
+	public function ActionRemoveComment($data, $form) {
+		$allowed = true;
+		
+		$comment = DataObject::get_by_id("DataObjectComment", $form->dataFieldByName("CommentID")->Value());
+		if($comment) {
+			$comment->extend("handleRemove", $allowed);
+			if($allowed) {
+				$comment->delete();
+			}
+		}
 		
 		$this->redirectBack();
 	}

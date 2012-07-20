@@ -32,4 +32,15 @@ class DataObjectComment extends DataObject {
 	public function Target() {
 		return DataObject::get_by_id($this->TargetType, $this->TargetID);
 	}
+	
+	public function Link($action = null) {
+		$target = $this->Target();
+		if($target)
+			return $target->Link($action);
+		else return false;
+	}
+	
+	public function FormRemoveComment() {
+		return singleton("DataObjectComments")->FormRemoveComment(null, $this);
+	}
 }
