@@ -11,7 +11,7 @@ class DataObjectCommentPermissions extends DataObjectDecorator implements Permis
 	public function UserCanRemove() {
 		if(Permission::check("DATAOBJECTCOMMENT_REMOVE_ANY")) return true;
 		$ownerid = $this->owner->OwnerID;
-		if($owner && Permission::check("DATAOBJECTCOMMENT_REMOVE")) {
+		if($ownerid && Permission::check("DATAOBJECTCOMMENT_REMOVE")) {
 			if($ownerid === Member::currentUserID()) return true;
 		}
 		return false;

@@ -1,12 +1,19 @@
 <?php
 class DataObjectComment extends DataObject {
 	public static $db = array(
+		"Type" => "Varchar(20)",
 		"TargetID" => "Int",
 		"TargetType" => "Text"
 	);
 	
+	public static $defaults = array(
+		"Type" => "Comment"
+	);
+	
 	public function scaffoldFormFields($_params = null) {
 		$fields = parent::scaffoldFormFields($_params);
+		
+		$fields->removeByName("Type");
 		
 		$IDField = $fields->fieldByName("TargetID");
 		$newIDField = new HiddenField("TargetID");

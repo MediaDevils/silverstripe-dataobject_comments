@@ -13,6 +13,32 @@ class DataObjectComments extends Controller {
 		return '';
 	}
 	
+	public function paginate($request) {
+		$targetID = $request->getVar("TargetID");
+		$targetType = $request->getVar("TargetType");
+		
+		$targetID = Convert::raw2sql($targetID);
+		$targetType = Convert::raw2sql($targetType);
+	
+		$start = $request->getVar("start");
+		$count = $request->getVar("count");
+		
+		$start = Convert::raw2sql($start);
+		$count = Convert::raw2sql($count);
+		
+		if(!is_numeric($start) || !is_numeric($count) || !is_numeric($targetID) || empty($targetType))
+			return null;
+		
+		$comments = DataObject::get("DataObjectComment", "\"TargetID\" = {$targetID} AND \"TargetType\" = '{$targetType}'", "Created DESC", "", "{$start}, {$count}");
+		
+		$rendered = array();
+		if($comments) foreach($comments as $comment)
+			$rendered[] = $comment->renderWith("DataObjectCommentLayout");
+		else return '';
+		
+		return json_encode($rendered);
+	}
+	
 	public function Link($action = null) {
 		return get_class($this);
 	}

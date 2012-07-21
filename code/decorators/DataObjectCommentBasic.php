@@ -26,8 +26,12 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 		$this->owner->OwnerID = Member::currentUserID();
 	}
 	
-	public function ConvertedContent() {
-		$content = $this->owner->dbObject("Content")->forTemplate();
+	public function ConvertedContent($limit = null) {
+		$content = $this->owner->dbObject("Content");
+		if($limit)
+			$content = $content->LimitCharacters($limit);
+		else
+			$content = $content->forTemplate();
 		$this->owner->extend("ConvertContent", $content);
 		return $content;
 	}
