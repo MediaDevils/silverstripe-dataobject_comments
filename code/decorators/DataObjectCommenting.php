@@ -8,8 +8,8 @@ class DataObjectCommenting extends DataObjectDecorator {
 		return DataObject::get("DataObjectComment", $filter, $sort, $join, $limit, $containerClass);
 	}
 	
-	public function DataObjectCommentsLimit($count) {
-		return $this->DataobjectComments("", "Created DESC", "", $count);
+	public function DataObjectCommentsLimit($count, $start = 0) {
+		return $this->DataobjectComments("", "Created DESC", "", "{$start}, {$count}");
 	}
 	
 	public function DataObjectCommentForm() {
