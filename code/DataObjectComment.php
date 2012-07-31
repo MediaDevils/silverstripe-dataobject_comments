@@ -40,10 +40,10 @@ class DataObjectComment extends DataObject {
 		return DataObject::get_by_id($this->TargetType, $this->TargetID);
 	}
 	
-	public function Link($action = null) {
+	public function Link($action = null, $includeHash = true) {
 		$target = $this->Target();
 		if($target)
-			return $target->Link($action);
+			return $target->Link($action).($includeHash?"#comment-{$this->ID}":"");
 		else return false;
 	}
 	

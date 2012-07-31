@@ -9,7 +9,11 @@ class DataObjectCommenting extends DataObjectDecorator {
 	}
 	
 	public function DataObjectCommentsLimit($count, $start = 0) {
-		return $this->DataobjectComments("", "Created DESC", "", "{$start}, {$count}");
+		return $this->DataObjectComments("", "Created DESC", "", "{$start}, {$count}");
+	}
+	
+	public function DataObjectCommentsReverse() {
+		return $this->DataObjectComments("", "Created ASC");
 	}
 	
 	public function DataObjectCommentForm() {
