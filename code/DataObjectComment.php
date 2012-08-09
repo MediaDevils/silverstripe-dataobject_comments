@@ -1,5 +1,8 @@
 <?php
 class DataObjectComment extends DataObject {
+	public static $singular_name = "Comment";
+	public static $plural_name = "Comments";
+
 	public static $db = array(
 		"Type" => "Varchar(20)",
 		"TargetID" => "Int",
