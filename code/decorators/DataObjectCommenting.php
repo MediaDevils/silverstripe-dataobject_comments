@@ -1,7 +1,7 @@
 <?php
 class DataObjectCommenting extends DataObjectDecorator {
 	public function DataObjectComments($filter = "", $sort = "Created DESC", $join = "", $limit = "", $containerClass = "DataObjectSet") {
-		$thisFilter = "\"TargetID\" = '{$this->owner->ID}' AND \"TargetType\" = '{$this->owner->ClassName}'";
+		$thisFilter = "\"TargetID\" = '{$this->owner->ID}' AND \"TargetType\" = '{$this->owner->class}'";
 		if(strlen($filter)) {
 			$filter = "{$thisFilter} AND {$filter}";
 		} else $filter = $thisFilter;
@@ -18,5 +18,12 @@ class DataObjectCommenting extends DataObjectDecorator {
 	
 	public function DataObjectCommentForm() {
 		return singleton('DataObjectComments')->FormAddComment(null, $this->owner);
+	}
+	
+	public function onBeforeDelete() {
+		$comments = $this->DataObjectComments();
+		if($comments) foreach($comments as $comment)
+			$comment->delete();
+		parent::onBeforeDelete();
 	}
 }
