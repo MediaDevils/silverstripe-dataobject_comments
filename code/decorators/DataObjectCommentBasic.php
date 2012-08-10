@@ -1,5 +1,9 @@
 <?php
 class DataObjectCommentBasic extends DataObjectDecorator {
+	public static $options = array(
+		"linkShownLength" => 10
+	);
+
 	public function extraStatics() {
 		return array(
 			"db" => array(
@@ -26,17 +30,40 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 		$this->owner->OwnerID = Member::currentUserID();
 	}
 	
-	public function ConvertedContent($limit = null) {
+	public function TargetIsOwner() {
+		return $this->owner->TargetType == "Member" && $this->owner->TargetID = $this->owner->OwnerID;
+	}
+	
+	public function TargetIsNotOwner() {
+		return !$this->TargetIsOwner();
+	}
+	
+	public function ConvertedContent($limit = null, $rich = true) {
 		$content = $this->owner->dbObject("Content");
 		if($limit)
-			$content = $content->LimitCharacters($limit);
+			$content = $content->LimitCharacters($limit?:null);
 		else
 			$content = $content->forTemplate();
+		if($rich)
+			$this->owner->extend("ConvertRich", $content);
 		$this->owner->extend("ConvertContent", $content);
 		return $content;
 	}
 	
 	public function ConvertContent(&$content) {
-		$content = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i', '<a href="$1" target="_blank">$1</a>', $content);
+		$matched = preg_match_all('@((?<![\w"])https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i', $content, $matches);
+		if($matched) {
+			$matches = array_unique($matches);
+			foreach($matches[0] as $url) {
+				$parsedURL = parse_url($url);
+				$host = $parsedURL["host"];
+				$remainder = $parsedURL["path"].(isset($parsedURL["query"])?"?{$parsedURL["query"]}":"");
+				if(isset(self::$options["linkShownLength"]) && self::$options["linkShownLength"])
+					$remainder = (strlen($remainder) > self::$options["linkShownLength"])?
+						substr($remainder, 0, self::$options["linkShownLength"])."..."
+						:$remainder;
+				$content = str_replace($url, " <a href=\"{$url}\" target=\"_blank\">{$host}{$remainder}</a> ", $content);
+			}
+		}
 	}
 }
