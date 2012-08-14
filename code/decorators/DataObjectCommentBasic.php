@@ -51,19 +51,19 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 	}
 	
 	public function ConvertContent(&$content) {
-		$matched = preg_match_all('@((?<![\w"])https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i', $content, $matches);
-		if($matched) {
-			$matches = array_unique($matches);
-			foreach($matches[0] as $url) {
-				$parsedURL = parse_url($url);
-				$host = $parsedURL["host"];
-				$remainder = $parsedURL["path"].(isset($parsedURL["query"])?"?{$parsedURL["query"]}":"");
-				if(isset(self::$options["linkShownLength"]) && self::$options["linkShownLength"])
-					$remainder = (strlen($remainder) > self::$options["linkShownLength"])?
-						substr($remainder, 0, self::$options["linkShownLength"])."..."
-						:$remainder;
-				$content = str_replace($url, " <a href=\"{$url}\" target=\"_blank\">{$host}{$remainder}</a> ", $content);
-			}
-		}
+		$options = self::$options;
+		$callback = function($matches) use ($options) {
+			$url = $matches[0];
+			$parsedURL = parse_url($url);
+			$host = $parsedURL["host"];
+			$remainder = (isset($parseURL["path"])?$parsedURL["path"]:"").(isset($parsedURL["query"])?"?{$parsedURL["query"]}":"");
+			if(isset($options["linkShownLength"]) && $options["linkShownLength"])
+				$remainder = (strlen($remainder) > $options["linkShownLength"])?
+					substr($remainder, 0, $options["linkShownLength"])."..."
+					:$remainder;
+			$content = " <a href=\"{$url}\" target=\"_blank\">{$host}{$remainder}</a> ";
+			return $content;
+		};
+		$content = preg_replace_callback('@((?<![\w"])https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i', $callback, $content);
 	}
 }
