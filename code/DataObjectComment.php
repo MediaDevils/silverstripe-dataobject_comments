@@ -31,6 +31,13 @@ class DataObjectComment extends DataObject {
 		return $fields;
 	}
 	
+	public function getRequiredFields() {
+		$required = new RequiredFields();
+		$this->extend("updateRequiredFields", $required);
+		
+		return $required;
+	}
+	
 	public function valid() {
 		if($this->owner->TargetID && $this->owner->TargetType) {
 			if($this->Target())

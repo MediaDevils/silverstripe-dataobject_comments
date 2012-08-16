@@ -26,6 +26,12 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 		return $fields;
 	}
 	
+	public function updateRequiredFields(&$required) {
+		$required->addRequiredField("Content");
+		
+		return $required;
+	}
+	
 	public function handleAdd(Form &$form) {
 		$this->owner->OwnerID = Member::currentUserID();
 	}

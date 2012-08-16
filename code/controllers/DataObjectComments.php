@@ -44,7 +44,8 @@ class DataObjectComments extends Controller {
 	}
 	
 	public function FormAddComment($request = null, DataObject $target = null) {
-		$fields = singleton("DataObjectComment")->getFrontEndFields();
+		$comment = singleton("DataObjectComment");
+		$fields = $comment->getFrontEndFields();
 		
 		if($target) {
 			$targetIDField = $fields->fieldByName("TargetID");
@@ -59,7 +60,9 @@ class DataObjectComments extends Controller {
 			new FormAction("ActionAddComment", "Add Comment")
 		);
 		
-		return new Form($this, "FormAddComment", $fields, $actions);
+		$required = $comment->getRequiredFields();
+		
+		return new Form($this, "FormAddComment", $fields, $actions, $required);
 	}
 	
 	public function ActionAddComment($data, $form) {
