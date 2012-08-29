@@ -1,5 +1,5 @@
 <?php
-class DataObjectCommenting extends DataObjectDecorator {
+class DataObjectCommenting extends DataExtension {
 	public function DataObjectComments($filter = "", $sort = "Created DESC", $join = "", $limit = "") {
 		$thisFilter = "\"TargetID\" = '{$this->owner->ID}' AND \"TargetType\" = '{$this->owner->class}'";
 		if(strlen($filter)) {
