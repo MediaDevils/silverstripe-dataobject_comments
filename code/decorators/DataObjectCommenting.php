@@ -1,11 +1,18 @@
 <?php
 class DataObjectCommenting extends DataObjectDecorator {
-	public function DataObjectComments($filter = "", $sort = "Created DESC", $join = "", $limit = "", $containerClass = "DataObjectSet") {
+	public function DataObjectComments($filter = "", $sort = "Created DESC", $join = "", $limit = "") {
 		$thisFilter = "\"TargetID\" = '{$this->owner->ID}' AND \"TargetType\" = '{$this->owner->class}'";
 		if(strlen($filter)) {
 			$filter = "{$thisFilter} AND {$filter}";
 		} else $filter = $thisFilter;
-		return DataObject::get("DataObjectComment", $filter, $sort, $join, $limit, $containerClass);
+		
+		$list = DataObjectComment::get();
+		if(!empty($filter)) $list = $list->filter($filter);
+		if(!empty($sort)) $list = $list->sort($sort);
+		if(!empty($join)) $list = $list->join($join);
+		if(!empty($limit)) $list = $list->limit($limit);
+		
+		return $list;
 	}
 	
 	public function DataObjectCommentsLimit($count, $start = 0) {

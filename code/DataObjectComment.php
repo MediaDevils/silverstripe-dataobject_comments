@@ -47,7 +47,7 @@ class DataObjectComment extends DataObject {
 	}
 	
 	public function Target() {
-		return DataObject::get_by_id($this->TargetType, $this->TargetID);
+		return ($this->TargetType)::get()->byID($this->TargetID);
 	}
 	
 	public function Link($action = null, $includeHash = true) {
