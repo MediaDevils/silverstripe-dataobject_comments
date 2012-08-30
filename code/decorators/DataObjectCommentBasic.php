@@ -1,10 +1,10 @@
 <?php
-class DataObjectCommentBasic extends DataObjectDecorator {
+class DataObjectCommentBasic extends DataExtension {
 	public static $options = array(
 		"linkShownLength" => 10
 	);
 
-	public function extraStatics() {
+	public function extraStatics($class = null, $extension = null) {
 		return array(
 			"db" => array(
 				"Content" => "Text"
@@ -15,7 +15,7 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 		);
 	}
 	
-	public function updateFrontEndFields(&$fields) {
+	public function updateFrontEndFields(FieldList $fields) {
 		$fields->removeByName("OwnerID");
 		
 		$ContentField = $fields->fieldByName("Content");

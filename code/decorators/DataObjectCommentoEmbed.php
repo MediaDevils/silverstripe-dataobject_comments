@@ -1,5 +1,5 @@
 <?php
-class DataObjectCommentoEmbed extends DataObjectDecorator {
+class DataObjectCommentoEmbed extends DataExtension {
 	public static $options = array();
 	public static $embedoptions = array();
 

@@ -56,7 +56,7 @@ class DataObjectComments extends Controller {
 			}
 		}
 		
-		$actions = new FieldSet(
+		$actions = new FieldList(
 			new FormAction("ActionAddComment", "Add Comment")
 		);
 		
@@ -81,7 +81,7 @@ class DataObjectComments extends Controller {
 	}
 	
 	public function FormRemoveComment($request = null, DataObjectComment $comment = null) {
-		$fields = new HiddenFieldSet(
+		$fields = new FieldList(
 			new HiddenField("CommentID", "Comment ID")
 		);
 		
@@ -91,7 +91,7 @@ class DataObjectComments extends Controller {
 				$commentIDField->setValue($comment->ID);
 		}
 		
-		$actions = new FieldSet(
+		$actions = new FieldList(
 			new FormAction("ActionRemoveComment", "Remove Comment")
 		);
 		

@@ -1,5 +1,5 @@
 <?php
-class DataObjectCommentPermissions extends DataObjectDecorator implements PermissionProvider {
+class DataObjectCommentPermissions extends DataExtension implements PermissionProvider {
 	public function providePermissions() {
 		return array(
 			"DATAOBJECTCOMMENT_ADD" => "Add DataObject comments",
