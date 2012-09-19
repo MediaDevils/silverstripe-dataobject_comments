@@ -37,7 +37,7 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 	}
 	
 	public function TargetIsOwner() {
-		return $this->owner->TargetType == "Member" && $this->owner->TargetID = $this->owner->OwnerID;
+		return $this->owner->TargetType == "Member" && $this->owner->TargetID == $this->owner->OwnerID;
 	}
 	
 	public function TargetIsNotOwner() {
