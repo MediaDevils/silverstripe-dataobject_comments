@@ -16,8 +16,17 @@ class DataObjectCommenting extends DataObjectDecorator {
 		return $this->DataObjectComments("", "Created ASC");
 	}
 	
-	public function DataObjectCommentForm() {
-		return singleton('DataObjectComments')->FormAddComment(null, $this->owner);
+	public function DataObjectCommentForm($enabled = true) {
+		$form = singleton('DataObjectComments')->FormAddComment(null, $this->owner);
+		if(!$enabled) {
+			$fields = $form->Fields();
+			if($fields) foreach($fields as $field)
+				$field->setDisabled(true);
+			foreach($form->actions as $action)
+				$action->setReadOnly(true);
+			$form->addExtraClass("disabled");
+		}
+		return $form;
 	}
 	
 	public function onBeforeDelete() {
