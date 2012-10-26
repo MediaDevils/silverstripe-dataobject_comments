@@ -46,6 +46,17 @@ class DataObjectComment extends DataObject {
 		return false;
 	}
 	
+	public function validate() {
+		$validation = new ValidationResult();
+		
+		if(!$this->valid())
+			$validation->error("Comments require a target");
+		
+		$this->extend("validate", $validation);
+		
+		return $validation;
+	}
+	
 	public function Target() {
 		return DataObject::get_by_id($this->TargetType, $this->TargetID);
 	}

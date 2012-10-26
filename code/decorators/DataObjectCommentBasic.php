@@ -72,4 +72,9 @@ class DataObjectCommentBasic extends DataObjectDecorator {
 		};
 		$content = preg_replace_callback('@((?<![\w"])https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@i', $callback, $content);
 	}
+	
+	public function validate(ValidationResult &$validate) {
+		if(!$this->owner->OwnerID)
+			$validate->error("Comments require an owner");
+	}
 }

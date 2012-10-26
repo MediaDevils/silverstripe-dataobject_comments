@@ -69,6 +69,10 @@ class DataObjectComments extends Controller {
 		$comment = new DataObjectComment();
 		$form->saveInto($comment);
 		$comment->extend('handleAdd', $form);
+		
+		if(!$comment->validate()->valid())
+			return $this->redirectBack();
+		
 		$comment->write();
 		$comment->extend('handleAfterAdd', $form);
 		
